@@ -7,10 +7,18 @@ contract BasePaper is Ownable {
 
   using SafeMath for uint256;
 
-  event NewPaper(uint id, string _issuerId, string _series, uint256 _numberFrom, uint256 _numberTo, uint256 _price, uint256 _id);
-    
   uint dnaDigits = 16;
   uint dnaModulus = 10 ** dnaDigits;
+
+  event NewPaperEvent(
+    uint id,
+    string _issuerId,
+    string _series,
+    uint256 _numberFrom,
+    uint256 _numberTo,
+    uint256 _price,
+    uint256 _id
+  );
 
   struct Paper {
     string issuerId;
@@ -26,29 +34,42 @@ contract BasePaper is Ownable {
   mapping (uint => address) public paperToOwner;
   mapping (address => uint) ownerPaperCount;
 
-  function _createPaper(string memory _issuerId, string memory _series, uint256 _numberFrom, uint256 _numberTo, uint256 _price, uint256 _id) internal {
+  function _createPaper(
+    string memory _issuerId,
+    string memory _series,
+    uint256 _numberFrom,
+    uint256 _numberTo,
+    uint256 _price,
+    uint256 _id
+  ) internal {
     uint id = papers.push(Paper(_issuerId, _series, _numberFrom, _numberTo, _price, _id)) - 1;
     paperToOwner[id] = msg.sender;
     ownerPaperCount[msg.sender] = ownerPaperCount[msg.sender].add(1);
-    emit NewPaper(id, _issuerId, _series, _numberFrom, _numberTo, _price, _id);
+    emit NewPaperEvent(id, _issuerId, _series, _numberFrom, _numberTo, _price, _id);
   }
 
-  function _generateRandomId(string memory _issuerId, string memory _series) private view returns (uint) {
+  function _generateRandomId(
+    string memory _issuerId,
+    string memory _series
+  ) private view returns (uint) {
     uint rand = uint(keccak256(abi.encodePacked(_issuerId, _series)));
     return rand % dnaModulus;
   }
 
-  function creatPaper(string memory _issuerId, string memory _series, uint256 _numberFrom, uint256 _numberTo, uint256 _price) internal {
-      
+  function creatPaper(
+    string memory _issuerId,
+    string memory _series,
+    uint256 _numberFrom,
+    uint256 _numberTo,
+    uint256 _price
+  ) internal {
     uint randId = _generateRandomId(_issuerId, _series);
     randId = randId - randId % 100;
     _createPaper(_issuerId, _series, _numberFrom, _numberTo, _price, randId);
   }
-
 
   modifier onlyOwnerOf(uint _paperId) {
     require(msg.sender == paperToOwner[_paperId]);
     _;
   }
 }
-

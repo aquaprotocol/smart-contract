@@ -10,8 +10,7 @@ contract IERC721 {
   function approve(address _approved, uint256 _tokenId) external payable;
   
   function create(string memory _issuerId, string memory _series, uint256 _numberFrom, uint256 _numberTo, uint256 _price) public;
-   function create(string memory _name, uint256 _price) public;
-   
-     function create(string memory _name, string memory _typeOf, uint256 _date, uint256 _price) public;
+  function create(string memory _name, uint256 _price) public;
+  function create(string memory _name, string memory _typeOf, uint256 _date, uint256 _price) public;
 }
 
