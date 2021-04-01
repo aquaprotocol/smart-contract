@@ -8,17 +8,29 @@ import {IERC721} from "./IERC721.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.3.0/contracts/ownership/Ownable.sol";
 import "./Treasury.sol";
 import "./BankFunctionOracleInterface.sol";
+import "github.com/smartcontractkit/chainlink/evm-contracts/src/v0.5/ChainlinkClient.sol";
 
-contract AquaProtocol is Ownable {
+
+contract AquaProtocol is Ownable, ChainlinkClient {
 
   using SafeMath for uint256;
   using SafeERC20 for ERC20Detailed;
 
   BankFunctionOracleInterface private oracleInstance;
 
-  mapping(uint256 => bool) myRequests;
+  uint256 public currentPrice;
+
+  address ORACLE_ADDRESS ="";
+
+  string constant JOBID = "";
+
+  uint256 constant private ORACLE_PAYMENT ="";
+
+
+  mapping(uint256=>bool) myRequests;
   mapping(address => address) internal assetList;
-  
+
+  address tokenAddress;
   address private oracleAddress;
 
   event Deposit(
@@ -64,15 +76,74 @@ contract AquaProtocol is Ownable {
     uint256 amount
   );
 
+  constructor() public {
+    setPublicChainlinkToken();
+  }
+
+  function requestEuroPrice()
+  public
+  onlyOwner
+  {
+    Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(JOBID), address(this), this.fulfill.selector);
+    req.add("get", "http://cirrus.cba.pl/uvi_hour/eth.php");
+    req.add("path", "EUR");
+    req.addInt("times", 100);
+    sendChainlinkRequestTo(ORACLE_ADDRESS, req, ORACLE_PAYMENT);
+  }
+
+  // fulfill receives a uint256 data type
+  function fulfill(
+    bytes32 _requestId,
+    uint256 _price
+  ) public recordChainlinkFulfillment(_requestId) {
+    currentPrice = _price;
+  }
+
+  // cancelRequest allows the owner to cancel an unfulfilled request
+  function cancelRequest(
+    bytes32 _requestId,
+    uint256 _payment,
+    bytes4 _callbackFunctionId,
+    uint256 _expiration
+  )
+  public onlyOwner
+  {
+    cancelChainlinkRequest(_requestId, _payment, _callbackFunctionId, _expiration);
+  }
+
+  function withdrawLink()
+  public onlyOwner
+  {
+    LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+    require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
+  }
+
+  function stringToBytes32(
+    string memory source
+  ) private pure returns (
+    bytes32 result
+  ) {
+    bytes memory tempEmptyStringTest = bytes(source);
+    if (tempEmptyStringTest.length == 0) {
+      return 0x0;
+    }
+    assembly { // solhint-disable-line no-inline-assembly
+      result := mload(add(source, 32))
+    }
+  }
+
   function deposit(
     address asset,
     uint256 amount,
     address onBehalfOf
   ) external {
 
-    Treasury(asset).mint(onBehalfOf, amount);
+    //tokenAddress  = assetList[asset];
+    tokenAddress = asset;
 
-    ERC20Detailed(asset).safeTransferFrom(msg.sender, asset, amount);
+    Treasury(tokenAddress).mint(onBehalfOf, amount);
+
+    ERC20Detailed(asset).safeTransferFrom(msg.sender, tokenAddress, amount);
 
     emit Deposit(asset, msg.sender, onBehalfOf, amount);
   }
@@ -84,10 +155,13 @@ contract AquaProtocol is Ownable {
     address ethAddress
   ) external {
 
-    Treasury(asset).mint(ethAddress, amount);
+    //tokenAddress  = assetList[asset];
+
+    tokenAddress = asset;
+
+    Treasury(tokenAddress).mint(ethAddress, amount);
 
     uint256 id = oracleInstance.invokeFiatDeposit(amount, bankAccountAddress);
-
     myRequests[id] = true;
 
     emit DepositFiatEvent(bankAccountAddress, amount);
@@ -126,14 +200,13 @@ contract AquaProtocol is Ownable {
     string memory issuerId,
     string memory series,
     uint256 numberFrom,
-    uint256 numberTo
-  ) public {
+    uint256 numberTo) public {
 
-    Treasury(asset).internalTransfer(asset, operator, amount);
+    Treasury(asset).internalTransfer(asset, operator, amount*currentPrice);
 
-    IERC721(tokenAddress).create(issuerId, series, numberFrom, numberTo, amount);
+    IERC721(tokenAddress).create(issuerId, series, numberFrom, numberTo, amount*currentPrice);
 
-    emit BuyPaperEvent(msg.sender, issuerId, series, numberFrom, numberTo, amount);
+    emit BuyPaperEvent(msg.sender, issuerId, series, numberFrom, numberTo, amount*currentPrice);
   }
 
 
@@ -142,14 +215,14 @@ contract AquaProtocol is Ownable {
     address tokenAddress,
     address operator,
     uint256 amount,
-    string memory name
-  ) public {
+    string memory name)
+  public {
 
-    Treasury(asset).internalTransfer(asset, operator, amount);
+    Treasury(asset).internalTransfer(asset, operator, amount*currentPrice);
 
-    IERC721(tokenAddress).create(name, amount);
+    IERC721(tokenAddress).create(name, amount*currentPrice);
 
-    emit BuyArtEvent(msg.sender, name, amount);
+    emit BuyArtEvent(msg.sender, name,  amount*currentPrice);
   }
 
   function buyInsurance(
@@ -162,18 +235,18 @@ contract AquaProtocol is Ownable {
     string memory _date
   ) public {
 
-    Treasury(asset).internalTransfer(asset, operator, amount);
+    Treasury(asset).internalTransfer(asset, operator, amount*currentPrice);
 
-    IERC721(tokenAddress).create(name, _typeOf, _date, amount);
+    IERC721(tokenAddress).create(name, _typeOf, _date, amount*currentPrice);
 
-    emit BuyArtEvent(msg.sender, name, amount);
+    emit BuyArtEvent(msg.sender, name,  amount*currentPrice);
   }
 
   function callbackDepositFiat(
     string memory _result,
     uint256 _id
   ) public onlyOracle {
-    require(myRequests[_id], "This request is not in pending list.");
+    require(myRequests[_id], "This request is not in my pending list.");
     delete myRequests[_id];
     emit CallbackDepositFiatEvent(_result, _id);
   }
