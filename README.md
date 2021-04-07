@@ -10,7 +10,7 @@
 * PLCurrency: 0x4e52b55514fd23f2f86926230efc8a5c0a694418
 
 ### AquaProtocol
-Short function desription:
+Short function description:
 
 #### Deposit
 Deposit stablecoin/crypto currency
@@ -88,25 +88,25 @@ function withdrawFiat(
   address operator,
         uint256 amount,
         string memory name,
-       string memory _typeOf, 
+       string memory _typeOf,
        string memory _date
        )
         public {}
 ```
 
 #### CallbackDepositFiat
-Function invoked by BankFunctionOracle for set state after Oracle OpenBanking API service use.
+The Function invoked by the BankFunctionOracle for set state after the Oracle OpenBanking API service use.
 ```solidity
     function callbackDepositFiat(string memory _result, uint256 _id) public onlyOracle {}
 ```
 #### CallbackWithdrawFiat
-Function invoked by BankFunctionOracle for set state after Oracle OpenBanking API service use.
+The Function invoked by the BankFunctionOracle for set state after the Oracle OpenBanking API service use.
 ```solidity
       function callbackWithdrawFiat(string memory _result, uint256 _id) public onlyOracle {}
 ```
 
 ### BankFunctionOracle
-The Smart contract uses for the Oracle OpenBanking API.
+The Smart contract uses the Oracle OpenBanking API.
 
 #### InvokeFiatDeposit
 Fiat deposition api. Invoke in AquaProtocol depositFiat function.
@@ -114,7 +114,7 @@ Fiat deposition api. Invoke in AquaProtocol depositFiat function.
 function invokeFiatDeposit(uint256 _amount, string memory _bankAccountNumber) public returns (uint256) {}
 ```
 #### InvokeFiatWithdraw
-Fiat withdraw api. Invoke in AquaProtocol depositFiat function.
+The Fiat withdrew the api. Invoke in AquaProtocol depositFiat function.
 ```solidity
 function invokeFiatWithdraw(uint256 _amount, string memory _bankAccountNumber) public returns (uint256) {}
 ```
@@ -131,8 +131,11 @@ function SetFiatWithdrawResult(string memory _result, address _callerAddress, ui
 ```
 
 ### ERC-20 smart contract implementation
-Treasury, PLCurrenct 
+Treasury, PLCurrenct
 
 
 ### ERC-721 smart contract implementation
 Art, Paper, Insurance
+
+
+
