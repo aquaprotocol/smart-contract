@@ -38,7 +38,7 @@ Deposit fiat currency
 Withdraw stable coin/cryptocurrency
 
 ```solidity
-      function withdraw(
+function withdraw(
     address asset,
     address ethAddress,
     uint256 amount,
@@ -56,55 +56,55 @@ function withdrawFiat(
     uint256 amount,
     address onBehalfOf
   ) external {}
-  ```
-  #### BuyPaper
+```
+#### BuyPaper
   Function for Paper investment
-  ```solidity
-    function buyPaper(
-  address asset,
-  address tokenAddress,
-  address operator,
-        uint256 amount,
-        string memory issuerId,
-        string memory series,
-        uint256 numberFrom,
-        uint256 numberTo) public {}
+```solidity
+function buyPaper(
+    address asset,
+    address tokenAddress,
+    address operator,
+    uint256 amount,
+    string memory issuerId,
+    string memory series,
+    uint256 numberFrom,
+    uint256 numberTo
+    ) public {}
 ```
-  #### BuyArt
+#### BuyArt
   Function for Art investment
-  ```solidity
-    function buyArt(
-  address asset,
-  address tokenAddress,
-  address operator,
-        uint256 amount,
-        string memory name)
-        public {}
+```solidity
+function buyArt(
+    address asset,
+    address tokenAddress,
+    address operator,
+    uint256 amount,
+    string memory name
+    ) public {}
 ```
-  #### BuyInsurance
+#### BuyInsurance
   Function for Insurance investment
-   ```solidity
-      function buyInsurance(
-  address asset,
-  address tokenAddress,
-  address operator,
-        uint256 amount,
-        string memory name,
-       string memory _typeOf,
-       string memory _date
-       )
-        public {}
+```solidit
+function buyInsurance(
+    address asset,
+    address tokenAddress,
+    address operator,
+    uint256 amount,
+    string memory name,
+    string memory _typeOf,
+    string memory _date
+    ) public {}
 ```
 
 #### CallbackDepositFiat
 The Function invoked by the BankFunctionOracle for set state after the Oracle OpenBanking API service use.
 ```solidity
-    function callbackDepositFiat(string memory _result, uint256 _id) public onlyOracle {}
+function callbackDepositFiat(string memory _result, uint256 _id) public onlyOracle {}
 ```
 #### CallbackWithdrawFiat
 The Function invoked by the BankFunctionOracle for set state after the Oracle OpenBanking API service use.
 ```solidity
-      function callbackWithdrawFiat(string memory _result, uint256 _id) public onlyOracle {}
+function callbackWithdrawFiat(string memory _result, uint256 _id) public onlyOracle {}
 ```
 
 ### BankFunctionOracle
@@ -138,7 +138,3 @@ Treasury, PLCurrenct
 
 ### ERC-721 smart contract implementation
 Art, Paper, Insurance
-
-
-
-
