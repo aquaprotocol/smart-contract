@@ -17,94 +17,94 @@ Short function description:
 #### Deposit
 Deposit stablecoin/crypto currency
 ```solidity
-    function deposit(
-    address asset,
-    uint256 amount,
-    address onBehalfOf
-  ) external {}
+    function deposit(
+    address asset,
+    uint256 amount,
+    address onBehalfOf
+  ) external {}
 ```
 #### DepositFiat
 Deposit fiat currency
 ```solidity
-    function depositFiat(
-    address asset,
-    uint256 amount,
-    string calldata bankAccountAddress,
-    address ethAddress
-  ) external {}
+    function depositFiat(
+    address asset,
+    uint256 amount,
+    string calldata bankAccountAddress,
+    address ethAddress
+  ) external {}
 ```
 
 #### Withdraw
-Withdraw stablecoin/cryptocurrency
+Withdraw stable coin/cryptocurrency
 
 ```solidity
-      function withdraw(
-    address asset,
-    address ethAddress,
-    uint256 amount,
-    address onBehalfOf
-  ) external {}
+      function withdraw(
+    address asset,
+    address ethAddress,
+    uint256 amount,
+    address onBehalfOf
+  ) external {}
 ```
 
 #### WithdrawFiat
 Withdraw fiat currency
 ```solidity
 function withdrawFiat(
-    address asset,
-    address ethAddress,
-    string calldata bankAccountAddress,
-    uint256 amount,
-    address onBehalfOf
-  ) external {}
-  ```
-  #### BuyPaper
-  Function for Paper investment
-  ```solidity
-    function buyPaper(
-  address asset,
-  address tokenAddress,
-  address operator,
-        uint256 amount,
-        string memory issuerId,
-        string memory series,
-        uint256 numberFrom,
-        uint256 numberTo) public {}
+    address asset,
+    address ethAddress,
+    string calldata bankAccountAddress,
+    uint256 amount,
+    address onBehalfOf
+  ) external {}
+  ```
+  #### BuyPaper
+  Function for Paper investment
+  ```solidity
+    function buyPaper(
+  address asset,
+  address tokenAddress,
+  address operator,
+        uint256 amount,
+        string memory issuerId,
+        string memory series,
+        uint256 numberFrom,
+        uint256 numberTo) public {}
 ```
-  #### BuyArt
-  Function for Art investment
-  ```solidity
-    function buyArt(
-  address asset,
-  address tokenAddress,
-  address operator,
-        uint256 amount,
-        string memory name)
-        public {}
+  #### BuyArt
+  Function for Art investment
+  ```solidity
+    function buyArt(
+  address asset,
+  address tokenAddress,
+  address operator,
+        uint256 amount,
+        string memory name)
+        public {}
 ```
-  #### BuyInsurance
-  Function for Insurance investment
-   ```solidity
-      function buyInsurance(
-  address asset,
-  address tokenAddress,
-  address operator,
-        uint256 amount,
-        string memory name,
-       string memory _typeOf,
-       string memory _date
-       )
-        public {}
+  #### BuyInsurance
+  Function for Insurance investment
+   ```solidity
+      function buyInsurance(
+  address asset,
+  address tokenAddress,
+  address operator,
+        uint256 amount,
+        string memory name,
+       string memory _typeOf,
+       string memory _date
+       )
+        public {}
 ```
 
 #### CallbackDepositFiat
 The Function invoked by the BankFunctionOracle for set state after the Oracle OpenBanking API service use.
 ```solidity
-    function callbackDepositFiat(string memory _result, uint256 _id) public onlyOracle {}
+    function callbackDepositFiat(string memory _result, uint256 _id) public onlyOracle {}
 ```
 #### CallbackWithdrawFiat
 The Function invoked by the BankFunctionOracle for set state after the Oracle OpenBanking API service use.
 ```solidity
-      function callbackWithdrawFiat(string memory _result, uint256 _id) public onlyOracle {}
+      function callbackWithdrawFiat(string memory _result, uint256 _id) public onlyOracle {}
 ```
 
 ### BankFunctionOracle
@@ -138,6 +138,7 @@ Treasury, PLCurrenct
 
 ### ERC-721 smart contract implementation
 Art, Paper, Insurance
+
 
 
 
