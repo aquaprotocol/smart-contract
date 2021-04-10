@@ -12,6 +12,10 @@ Chainlink Virtual Hackathon Spring 2021
 * PLCurrency: 0x4e52b55514fd23f2f86926230efc8a5c0a694418
 
 ### AquaProtocol
+
+The protocol allows on buying investments possibilities as the stock paper, the insurance, or the art in the Euro currency. To this, the Chainlink oracle with the [requestEuroPrice](https://github.com/aquaprotocol/smart-contract/blob/69869994495a515af67855448b200e7798138dc7/AquaProtocol.sol#L83) function is used. The function feeds Euro price from fake web service. 
+
+
 Short function description:
 
 #### Deposit
