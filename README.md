@@ -2,6 +2,8 @@
 
 Chainlink Virtual Hackathon Spring 2021
 
+Smart contracts were installed in The Kovan Testnet.
+
 ### Component addresses:
 * AquaProtocol: 0xd43DDE8c0fa617Fe7E8Ac53e8D17684F8F0FE75b
 * Treasury: 0x843836D5fe2c9FbbcDa9711BD36046cD0975769f
